@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GPACalculator</string>
+    <string name="calcButton">Calculate your GPA</string>
+</resources>
