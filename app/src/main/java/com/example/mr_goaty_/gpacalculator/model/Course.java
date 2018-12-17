@@ -1,11 +1,11 @@
 package com.example.mr_goaty_.gpacalculator.model;
 
 public class Course {
-    private int grade;
+    private double grade;
     private  double points;
     private String name;
 
-    public Course(String name, double points, int grade){
+    public Course(String name, double points, double grade){
         this.points = points;
         this.grade = grade;
         this.name = name;
@@ -23,7 +23,7 @@ public class Course {
         return name;
     }
 
-    public int getGrade() {
+    public double getGrade() {
         return grade;
     }
 

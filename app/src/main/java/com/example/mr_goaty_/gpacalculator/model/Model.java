@@ -15,7 +15,7 @@ public class Model {
         courses.add(new Course(name,points,grade));
     }
 
-    public int calculateGPA(){
+    public double calculateGPA(){
         double sumPoints = 0;
         double totalPoints = 0;
 
@@ -24,7 +24,7 @@ public class Model {
             totalPoints += c.getPoints() * c.getGrade();
         }
 
-        return (int)( totalPoints / sumPoints);
+        return ((double)Math.round((totalPoints / sumPoints)*1000)/1000);
     }
     public  boolean isNumeric(String str)
     {
