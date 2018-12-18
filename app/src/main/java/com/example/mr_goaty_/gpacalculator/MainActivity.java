@@ -1,5 +1,6 @@
 package com.example.mr_goaty_.gpacalculator;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,25 +10,27 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mr_goaty_.gpacalculator.model.Model;
 
 public class MainActivity extends AppCompatActivity {
+    private final Model model = new Model();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final Model model = new Model();
-
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -36,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
                 createPopup(model);
             }
         });
-
-
     }
 
     public void createPopup(final Model model) {
@@ -71,9 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getBaseContext(), "Name: " + name + " Points: " + points + " Grade:" + grade, Toast.LENGTH_SHORT).show();
                 if (model.isNumeric(points) && model.isNumeric(grade)) {
                     model.addCourse(name, Integer.parseInt(grade), Double.parseDouble(points));
-                    updateGPAText(model);
-                }else if(model.isNumeric(points)){
-                    model.addCourse(name,0,Double.parseDouble(points));
+                    updateGPAText();
+                    addToList(name,points,grade);
+                } else if (model.isNumeric(points)) {
+                    model.addCourse(name, 0, Double.parseDouble(points));
+                    addToList(name,points,"U");
                 }
 
             }
@@ -82,11 +85,53 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void updateGPAText(Model model){
+    private void addToList(String name, String points, String grade){
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View newCourse = inflater.inflate(R.layout.course_field,null);
+        TextView textName = newCourse.findViewById(R.id.course_name);
+        TextView textPoints = newCourse.findViewById(R.id.course_points);
+        EditText editGrade = newCourse.findViewById(R.id.course_grade);
+        editGrade.setText(grade);
+        textName.setText(name);
+        textPoints.setText(points);
+
+        LinearLayout parent = findViewById(R.id.parent_linearLayout);
+        parent.addView(newCourse);
+    }
+
+    public void onDelete(View v){
+        LinearLayout parent = findViewById(R.id.parent_linearLayout);
+        parent.removeView((View) v.getParent().getParent());
+        updateGPAText();
+    }
+
+    private void updateGPAText() {
         double gpa = model.calculateGPA();
         double average = model.calculateAverage();
-        TextView textView  = findViewById(R.id.GPA_title);
+        TextView textView = findViewById(R.id.GPA_title);
         textView.setText("GPA: " + gpa + " Average: " + average);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear:
+                model.clear();
+                return true;
+            case R.id.save:
+                return true;
+            case R.id.load:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

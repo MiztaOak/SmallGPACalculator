@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">GPACalculator</string>
     <string name="calcButton">Calculate your GPA</string>
+    <string name="save">Save</string>
+    <string name="load">Load</string>
+    <string name="clear">Clear</string>
+    <string name="course_name">Course</string>
+    <string name="course_points">Credits</string>
+    <string name="course_grade">Grade</string>
 </resources>
