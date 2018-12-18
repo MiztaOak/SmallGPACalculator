@@ -16,16 +16,31 @@ public class Model {
     }
 
     public double calculateGPA(){
+        double conversionMultiplier = 0.5;
         double sumPoints = 0;
         double totalPoints = 0;
 
         for (Course c: courses){
-            sumPoints += c.getPoints();
-            totalPoints += c.getPoints() * c.getGrade();
+            sumPoints += c.getPoints()*conversionMultiplier;
+            totalPoints += c.getPoints()*conversionMultiplier*convertGrade(c.getGrade());
         }
 
         return ((double)Math.round((totalPoints / sumPoints)*1000)/1000);
     }
+
+    private double convertGrade(double grade){
+        switch ((int)grade){
+            case 5:
+                return 4;
+            case 4:
+                return 3.7;
+            case 3:
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
     public  boolean isNumeric(String str)
     {
         try
@@ -37,6 +52,18 @@ public class Model {
             return false;
         }
         return true;
+    }
+
+    public double calculateAverage(){
+        double sumPoints = 0;
+        double totalPoints = 0;
+
+        for (Course c: courses){
+            sumPoints += c.getPoints();
+            totalPoints += c.getPoints() * c.getGrade();
+        }
+
+        return ((double)Math.round((totalPoints / sumPoints)*1000)/1000);
     }
 
 }

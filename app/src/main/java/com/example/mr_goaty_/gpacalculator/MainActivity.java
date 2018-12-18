@@ -28,17 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         final Model model = new Model();
 
-        Button button = findViewById(R.id.button);
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                double gpa = model.calculateGPA();
-                final TextView text = findViewById(R.id.GPA_Value);
-                text.setText("" + gpa + "");
-            }
-        });
 
+        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,11 +71,22 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getBaseContext(), "Name: " + name + " Points: " + points + " Grade:" + grade, Toast.LENGTH_SHORT).show();
                 if (model.isNumeric(points) && model.isNumeric(grade)) {
                     model.addCourse(name, Integer.parseInt(grade), Double.parseDouble(points));
+                    updateGPAText(model);
+                }else if(model.isNumeric(points)){
+                    model.addCourse(name,0,Double.parseDouble(points));
                 }
+
             }
         });
         android.support.v7.app.AlertDialog dialog = alert.create();
         dialog.show();
     }
 
+    private void updateGPAText(Model model){
+        double gpa = model.calculateGPA();
+        double average = model.calculateAverage();
+        TextView textView  = findViewById(R.id.GPA_title);
+        textView.setText("GPA: " + gpa + " Average: " + average);
+
+    }
 }
